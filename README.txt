@@ -1,1 +1,1 @@
-For a testing Git
+Javarush projects
