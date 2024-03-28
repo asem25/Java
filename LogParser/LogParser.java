@@ -638,19 +638,35 @@ public class LogParser implements IPQuery, UserQuery, DateQuery, EventQuery, QLQ
                 Set<Object> set = new HashSet<>();
                 try {
                     Pattern pattern = Pattern.compile("get (?<field1>\\w+) for (?<field2>\\w+) = \"(?<value1>.*?)\"");
+                    Pattern pattern1  =  Pattern.compile("and date between \"(?<date1>.+?)\" and \"(?<date2>.+?)\"");
                     Matcher matcher = pattern.matcher(query);
                     matcher.find();
-
+                    Matcher matcher2 = pattern1.matcher(query);
                     String search = matcher.group(1);
                     String key = matcher.group(2);
                     String value = matcher.group(3);
+                    String date1 = null;
+                    String date2 = null;
+                    boolean flag = false;
+                    if (matcher2.find()){
+                        flag = true;
+                        date1 = matcher2.group(1);
+                        date2 = matcher2.group(2);
+                    }
+
                     for (Log log : logList) {
                         Object o = Log.class.getDeclaredField(key).get(log);
                         if (o instanceof Date && (((Date) o).getTime() == simpleDateFormat.parse(value).getTime())
                                 || (o instanceof Event && (Event) o == Event.valueOf(value))
                                 || (o instanceof Status && (Status) o == Status.valueOf(value))
                                 || (o instanceof String && o.toString().equalsIgnoreCase(value))) {
-                            set.add(Log.class.getDeclaredField(search).get(log));
+                            if (flag) {
+                                if (betweenDate(simpleDateFormat.parse(date1), simpleDateFormat.parse(date2), log)){
+                                    set.add(Log.class.getDeclaredField(search).get(log));
+                                }
+                            }else {
+                                set.add(Log.class.getDeclaredField(search).get(log));
+                            }
                         }
                     }
                 } catch (Exception e) {
