@@ -1,1 +1,1 @@
-Javarush projects
+Java projects
