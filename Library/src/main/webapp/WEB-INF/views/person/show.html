@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    .overdue {
+        color: red;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>People</title>
+</head>
+<body>
+<p th:text="${person.getFullname()}">VALUE</p>
+<p th:text="${person.getBirthday()}">VALUE</p>
+
+<div th:if = "${booksList}">
+    <hr/>
+    <b>List of books: </b>
+    <br/>
+    <table th:each="book : ${booksList}">
+        <tr th:if = "${book.isOverdue()}">
+            <td style="color:red" th:text="${book.name} + ', ' + ${book.author} + ', ' + ${book.date_of_prod}"></td>
+        </tr>
+        <tr th:unless = "${book.isOverdue()}">
+            <td th:text = "${book.name} + ', ' + ${book.author} + ', ' + ${book.date_of_prod}"></td>
+        </tr>
+    </table>
+</div>
+<div th:unless = "${booksList}">
+    <p>People list books is empty</p>
+</div>
+
+<a th:href="@{/person/{id}/edit(id=${person.getId()})}">Edit</a>
+<form th:method="DELETE" th:action="@{/person/{id}(id = ${person.getId()})}">
+    <input type="submit" value="DELETE"/>
+
+</form>
+</body>
+</html>

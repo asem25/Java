@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+<body>
+<form th:method = "GET" th:action="@{/book/search}">
+    <label for="query"></label><input type="text" name="query" id="query"/>
+    <input type="submit" value="Found"/>
+    <div th:if = "${query == null}">
+        <span>Enter a request</span>
+    </div>
+    <div th:if = "${query != null}">
+    <div th:if = "${not #lists.isEmpty(query)}">
+        <div th:each = "book : ${query}">
+            <a th:text="${'Name: ' + book.name}"></a>
+            <br>
+            <a th:text="${'Author: ' + book.author}"></a>
+            <br>
+            <div th:if = "${book.owner != null}">
+            <a th:text="${'Book is blocked by: ' + book.owner}"></a>
+            </div>
+            <div th:unless = "${book.owner != null}">
+                <span>Book is free</span>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div th:if = "${#lists.isEmpty(query)}">
+        <span>The search did not find anything</span>
+    </div>
+    </div>
+</form>
+</body>
+</html>

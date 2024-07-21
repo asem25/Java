@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book</title>
+    <style>
+        .highlight {
+            background-color: burlywood;
+        }
+    </style>
+</head>
+<body>
+<p th:text="${book.getName()}">VALUE</p>
+<p th:text="${book.getId()}">VALUE</p>
+<p th:text="${book.getAuthor()}">VALUE</p>
+<p th:text="${book.getDate_of_prod()}">VALUE</p>
+<div th:if = "${person_with != null}">
+    <a th:href="@{/person/{id}(id=${person_with.getId()})}">
+        Book is blocked by
+        <span class="highlight" th:text="${person_with.fullname}">ФИО</span>
+    </a>
+    <form th:method="DELETE" th:action = "@{/book/{id}/delpeople(id = ${book.getId()})}">
+        <input type = "submit" value="Set book empty">
+    </form>
+</div>
+<div th:unless = "${person_with != null}">
+    <form th:method = "PATCH" th:action = "@{/book/{id}/addpeople(id=${book.getId()})}">
+        <label for="person_to_add">Choose person:</label>
+        <select th:object="${person}" th:field="*{id}" id="person_to_add">
+            <option th:each="per : ${personList}" th:value="${per.getId()}"
+                    th:text="${per.getFullname()}">
+            </option>
+        </select>
+        <input type="submit" value="Set book">
+    </form>
+</div>
+<a th:href="@{/book/{id}/edit(id=${book.getId()})}">Edit</a>
+<form th:method="DELETE" th:action = "@{/book/{id}(id = ${book.getId()})}">
+    <input type="submit" value="DELETE"/>
+</form>
+</body>
+</html>
