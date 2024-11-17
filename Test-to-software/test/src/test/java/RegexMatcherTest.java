@@ -35,13 +35,13 @@ public class RegexMatcherTest {
         String regex = "hello";
         String text1 = null;
 
-        assertThrows(NullPointerException.class, () -> Main.matches(regex, text1));
+        assertThrows(IllegalArgumentException.class, () -> Main.matches(regex, text1));
 
         // Проверяем случай с null значением регулярного выражения
         String nullRegex = null;
         String text2 = "hello";
 
-        assertThrows(NullPointerException.class, () -> Main.matches(nullRegex, text2));
+        assertThrows(IllegalArgumentException.class, () -> Main.matches(nullRegex, text2));
     }
     @Test
     void testWhitespace() {
